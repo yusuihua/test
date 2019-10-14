@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--1.映射配置文件的根标签的namespace属性的值要和对应的Dao接口的全限定名一致-->
+<mapper namespace="com.itheima.dao.MenuDao">
+    <select id="getMenuIcon" parameterType="String" resultType="Menu">
+        SELECT  m.id,m.name,m.icon,m.path
+        FROM  t_menu m,t_user u,t_user_role ur,t_role_menu rm,t_role r
+        WHERE 	u.username=#{name} AND ur.user_id=u.id
+	            AND r.id=ur.role_id AND rm.role_id=r.id
+	            AND m.id=rm.menu_id AND  m.level=1
+    </select>
+
+    <select id="getMenuChildren" parameterType="map" resultType="Menu">
+        SELECT  m.id,m.name,m.linkUrl,m.path
+        FROM  t_menu m,t_user u,t_user_role ur,t_role_menu rm,t_role r
+        WHERE 	u.username=#{name} AND ur.user_id=u.id
+	            AND r.id=ur.role_id AND rm.role_id=r.id
+	            AND m.id=rm.menu_id AND  m.level=2 AND m.parentMenuId=#{id}
+    </select>
+</mapper>
